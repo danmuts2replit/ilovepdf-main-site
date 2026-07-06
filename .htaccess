@@ -1,0 +1,20 @@
+RewriteEngine On
+
+# Normalize: legacy /index.html -> /
+RewriteRule ^index\.html$ / [R=301,L]
+
+# Legacy nested URLs -> new flat URLs (301, preserves SEO ranking signal)
+RewriteRule ^pages/([a-z-]+)\.html$ /$1 [R=301,L]
+RewriteRule ^pages/([a-z-]+)/?$ /$1 [R=301,L]
+RewriteRule ^tools/([a-z0-9-]+)\.html$ /$1 [R=301,L]
+RewriteRule ^tools/([a-z0-9-]+)/?$ /$1 [R=301,L]
+
+# Serve company/legal pages at their flat URL (internal rewrite, browser URL stays clean)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(about|contact|pricing|privacy|terms)$ pages/$1.html [L]
+
+# Serve tool pages at their flat URL (internal rewrite, browser URL stays clean)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^([a-z0-9-]+)$ tools/$1.html [L]
